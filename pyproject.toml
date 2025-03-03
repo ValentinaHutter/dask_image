@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "dask_image"
-version = "1.1.0"
+version = "1.1.1"
 description = "Dask image with all requirements. Computed various indices. "
 authors = ["ValentinaHutter <valentina.hutter@eodc.eu>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10.8"
+python = "^3.12.2"
 tornado =  "6.1"
 cloudpickle = "2.2.0"
 msgpack = "1.0.4"
