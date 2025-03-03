@@ -43,7 +43,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 - \
 WORKDIR /app
 
 # Copy the pyproject.toml and poetry.lock files to the container
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 COPY --chown=1000:1000 ./pyproject.toml .
 COPY --chown=1000:1000 ./dask.yaml ~/.config/dask/dask.yaml
 
