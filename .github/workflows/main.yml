@@ -1,0 +1,20 @@
+name: Build Docker Image
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push
+      run: |
+        docker build . --tag ghcr.io/ValentinaHutter/dask_image:1.1.0
