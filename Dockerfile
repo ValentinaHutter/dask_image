@@ -45,11 +45,10 @@ WORKDIR /app
 # Copy the pyproject.toml and poetry.lock files to the container
 COPY pyproject.toml poetry.lock ./
 COPY --chown=1000:1000 ./pyproject.toml .
-COPY --chown=1000:1000 ./poetry.lock .
 COPY --chown=1000:1000 ./dask.yaml ~/.config/dask/dask.yaml
 
 # Install dependencies
-RUN poetry install --no-root
+RUN poetry install --all-extras
 
 # ----------------------------------------------------
 # PRODUCTION
