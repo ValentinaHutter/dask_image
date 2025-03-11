@@ -20,7 +20,7 @@ def ndvi(item):
     data = odc_stac.load([item],
         crs=crs,
         bands=["red", "nir"],
-        chunks={'time': -1, 'x': 512, 'y': 512},
+        chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
     b04 = data.sel({band_dim: "red"})
     b08 = data.sel({band_dim: "nir"})

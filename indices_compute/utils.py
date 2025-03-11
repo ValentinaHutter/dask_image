@@ -29,7 +29,7 @@ def tansig(input):
     return 2 / (1 + np.exp(-2 * input)) - 1
 
 
-def load_data(items, bands=bands, chunks={'time': -1, 'x': 512, 'y': 512}, resolution=10):
+def load_data(items, bands=bands, chunks={'time': -1, 'x': 1024, 'y': 1024}, resolution=10):
     if not isinstance(items, list):
         items = [items]
     item = items[0]
