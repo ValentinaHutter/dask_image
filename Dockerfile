@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.12-bookworm AS base
+FROM python:3.12.2-bookworm AS base
 
 RUN addgroup --gid 1000 ubuntu
 RUN adduser --disabled-password --gecos '' --uid 1000 --gid 1000 ubuntu
@@ -53,7 +53,7 @@ RUN poetry install --all-extras
 
 # ----------------------------------------------------
 # PRODUCTION
-FROM python:3.12-slim-bookworm AS production
+FROM python:3.12.2-slim-bookworm AS production
 
 RUN DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
