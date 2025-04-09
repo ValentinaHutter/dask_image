@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dask_image"
-version = "1.1.14"
+version = "1.1.15"
 description = "Dask image with all requirements. Computed various indices. "
 authors = ["ValentinaHutter <valentina.hutter@eodc.eu>"]
 readme = "README.md"
@@ -27,10 +27,10 @@ requests = "<=2.32.3"
 zarr = "2.18.0"
 xarray = "<=2025.1.2"
 s3fs = "<=2025.2.0"
-dask = {extras = ["array", "core", "distributed"], version = "2022.10.2"}
+dask = {extras = ["array", "core", "distributed"], version = "<=2024.1.0"}
 dask-gateway = "<=2024.1.0"
 botocore = "1.35.88"
-aiobotocore = "<=2.3.4"
+aiobotocore = "<=2.21.0"
 
 
 [build-system]
