@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dask_image"
-version = "1.1.15"
+version = "1.1.16"
 description = "Dask image with all requirements. Computed various indices. "
 authors = ["ValentinaHutter <valentina.hutter@eodc.eu>"]
 readme = "README.md"
@@ -18,19 +18,19 @@ netcdf4 = "1.7.2"
 h5netcdf = "1.4.0"
 scipy = "<=1.15.1"
 shapely = "<=2.0.7"
-rasterio = "<=1.4.3"
+rasterio = "*"
 odc-geo = "<=0.4.9.post0"
 odc-stac = "<=0.3.3"
 pandas = "<=2.2.3"
 pyproj = "<=3.7.0"
 requests = "<=2.32.3"
 zarr = "2.18.0"
-xarray = "<=2025.1.2"
-s3fs = "<=2025.2.0"
+xarray = "*"
+s3fs = "*"
 dask = {extras = ["array", "core", "distributed"], version = "<=2024.1.0"}
 dask-gateway = "<=2024.1.0"
 botocore = "1.35.88"
-aiobotocore = "<=2.21.0"
+aiobotocore = "*"
 
 
 [build-system]
