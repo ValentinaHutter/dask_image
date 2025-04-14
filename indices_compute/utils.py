@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 degToRad = np.pi / 180
 
 bands = ["green", "red", "rededge1", "rededge2", "rededge3", "nir08", "swir16", "swir22"]
+names_res = ["B03_10m", "B04_10m", "B05_20m", "B06_20m", "B07_20m", "B8A_20m", "B11_20m", "B12_20m"]
 names = ["B03", "B04", "B05", "B06", "B07", "B8A", "B11", "B12"]
 band_names = {name: bands[i] for i, name in enumerate(names)}
 
@@ -15,6 +16,29 @@ bands_10m = ["red", "green", "blue", "nir"]
 bands_20m = ["swir22", "rededge2", "rededge3", "rededge1", "swir16", "nir08"]
 bands_60m = ["coastal", "nir09"]
 bands_none = ["visual", "wvp", "scl", "aot", "cloud", "snow"]
+
+
+
+bands = ["green", "red", "rededge1", "rededge2", "rededge3", "nir08", "swir16", "swir22"]
+names_res = ["B03_10m", "B04_10m", "B05_20m", "B06_20m", "B07_20m", "B8A_20m", "B11_20m", "B12_20m"]
+names = ["B03", "B04", "B05", "B06", "B07", "B8A", "B11", "B12"]
+band_names = {name: bands[i] for i, name in enumerate(names)}
+
+bands_10m = ["red", "green", "blue", "nir"]
+names_10m = ["B02_10m", "B03_10m", "B04_10m", "B08_10m"]
+band_names_10m = {name: bands_10m[i] for i, name in enumerate(names_10m)}
+
+bands_20m = ["rededge1", "rededge2", "rededge3", "nir08", "swir16", "swir22"]
+names_20m = ["B05_20m", "B06_20m", "B07_20m", "B8A_20m", "B11_20m", "B12_20m"]
+band_names_20m = {name: bands_20m[i] for i, name in enumerate(names_20m)}
+
+bands_60m = ["coastal", "nir09"]
+names_60m = ["B01_60m", "B09_60m"]
+band_names_60m = {name: bands_60m[i] for i, name in enumerate(names_60m)}
+
+bands_none = ["wvp", "scl", "aot"]
+names_none = ["WVP_10m", "SCL_20m", "AOT_10m"]
+band_names_none = {name: bands_none[i] for i, name in enumerate(names_none)}
 
 
 def normalize(unnormalized, min, max):
@@ -57,8 +81,14 @@ def load_data(items, bands=bands, chunks={'time': -1, 'x': 1024, 'y': 1024}, res
 
 
 def get_viewing_angles(item):
-    # viewing angles can only be read from MTD.xml
-    # solar angles are in the stac item properties
+
+    if "view:azimuth" in item.properties and "view:incidence_angle" in item.properties: 
+        saa = item.properties["view:sun_azimuth"]
+        sza = item.properties["view:sun_elevation"]
+        vaa = item.properties["view:azimuth"]
+        vza = item.properties["view:incidence_angle"]
+        return vza, vaa, sza, saa
+
     metadata = requests.get(item.assets['granule_metadata'].href).text
 
     root = ET.fromstring(metadata)

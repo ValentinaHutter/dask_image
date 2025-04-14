@@ -2,7 +2,7 @@ from odc import stac as odc_stac
 from pyproj import CRS
 
 
-def get_crs(item):
+def get_crs(item):    
     if isinstance(item, list):
         item = item[0]
     if "proj:epsg" in item.properties:
@@ -20,8 +20,7 @@ def get_crs(item):
         print("Could not find CRS from item properties: ", item.properties)
     return crs
 
-
-def ndvi(item):
+def osavi(item):
     band_dim = "bands"
     crs = get_crs(item)
     if not isinstance(item, list):
@@ -34,72 +33,76 @@ def ndvi(item):
     b04 = data.sel({band_dim: "red"})
     b08 = data.sel({band_dim: "nir"})
 
-    ndvi = (b08 - b04)/(b08 + b04)
+    osavi = (1 + 0.16)*(b08 - b04)/(b08 + b04 + 0.16)
 
-    ndvi = ndvi.assign_coords(**{"index": "ndvi"})
-    ndvi = ndvi.expand_dims(dim="index")
+    osavi = osavi.assign_coords(**{"index": "osavi"})
+    osavi = osavi.expand_dims(dim="index")
 
-    return ndvi
+    return osavi
 
 
-def ndwi(item):
+
+def albedo(item):
     band_dim = "bands"
     crs = get_crs(item)
     if not isinstance(item, list):
         item = [item]
     data = odc_stac.load(item,
         crs=crs,
-        bands=["green", "nir"],
+        bands=["red", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b03 = data.sel({band_dim: "green"})
-    b08 = data.sel({band_dim: "nir"})
-
-    ndwi = (b03 - b08)/(b08 + b03)
-
-    ndwi = ndwi.assign_coords(**{"index": "ndwi"})
-    ndwi = ndwi.expand_dims(dim="index")
-
-    return ndwi
-
-
-def ndmi(item):
-    band_dim = "bands"
-    crs = get_crs(item)
-    if not isinstance(item, list):
-        item = [item]
-    data = odc_stac.load(item,
-        crs=crs,
-        bands=["nir", "swir16"],
-        chunks={'time': -1, 'x': 1024, 'y': 1024},
-        resolution=(10)).to_array(dim=band_dim)
+    b02 = data.sel({band_dim: "blue"})
+    b04 = data.sel({band_dim: "red"})
     b08 = data.sel({band_dim: "nir"})
     b11 = data.sel({band_dim: "swir16"})
-   
-    ndmi = (b08 - b11)/(b08 + b11)
+    b12 = data.sel({band_dim: "swir22"})
 
-    ndmi = ndmi.assign_coords(**{"index": "ndmi"})
-    ndmi = ndmi.expand_dims(dim="index")
+    albedo = 0.356*b02 + 0.130*b04 + 0.373*b08 + 0.085*b11 + 0.072*b12 - 0.0018
 
-    return ndmi
+    albedo = albedo.assign_coords(**{"index": "albedo"})
+    albedo = albedo.expand_dims(dim="index")
 
+    return albedo
 
-def nbr(item):
+def evi(item):
     band_dim = "bands"
     crs = get_crs(item)
     if not isinstance(item, list):
         item = [item]
     data = odc_stac.load(item,
         crs=crs,
-        bands=["nir", "swir22"],
+        bands=["blue", "red", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
+    b02 = data.sel({band_dim: "blue"})
+    b04 = data.sel({band_dim: "red"})
     b08 = data.sel({band_dim: "nir"})
-    b12 = data.sel({band_dim: "swir22"})
-   
-    nbr = (b08 - b12)/(b08 + b12)
 
-    nbr = nbr.assign_coords(**{"index": "nbr"})
-    nbr = nbr.expand_dims(dim="index")
+    evi = 2.5*(b08 - b04)/((b08 + 6*b04-7.5*b02) + 1)
 
-    return nbr
+    evi = evi.assign_coords(**{"index": "evi"})
+    evi = evi.expand_dims(dim="index")
+
+    return evi
+
+def exg(item):
+    band_dim = "bands"
+    crs = get_crs(item)
+    if not isinstance(item, list):
+        item = [item]
+    data = odc_stac.load(item,
+        crs=crs,
+        bands=["blue", "green", "red"],
+        chunks={'time': -1, 'x': 1024, 'y': 1024},
+        resolution=(10)).to_array(dim=band_dim)
+    b02 = data.sel({band_dim: "blue"})
+    b03 = data.sel({band_dim: "green"})
+    b04 = data.sel({band_dim: "red"})
+
+    ExG = (2 * b03) - (b04 + b02)
+
+    ExG = ExG.assign_coords(**{"index": "exg"})
+    ExG = ExG.expand_dims(dim="index")
+
+    return ExG
