@@ -49,7 +49,7 @@ def albedo(item):
         item = [item]
     data = odc_stac.load(item,
         crs=crs,
-        bands=["red", "nir"],
+        bands=["blue", "red", "nir", "swir16", "swir22"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
     b02 = data.sel({band_dim: "blue"})
