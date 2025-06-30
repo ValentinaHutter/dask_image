@@ -30,8 +30,8 @@ def osavi(item):
         bands=["red", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b04 = data.sel({band_dim: "red"})
-    b08 = data.sel({band_dim: "nir"})
+    b04 = data.sel({band_dim: "red"}).astype(int)*0.0001-0.1
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
 
     osavi = (1 + 0.16)*(b08 - b04)/(b08 + b04 + 0.16)
 
@@ -52,11 +52,11 @@ def albedo(item):
         bands=["blue", "red", "nir", "swir16", "swir22"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b02 = data.sel({band_dim: "blue"})
-    b04 = data.sel({band_dim: "red"})
-    b08 = data.sel({band_dim: "nir"})
-    b11 = data.sel({band_dim: "swir16"})
-    b12 = data.sel({band_dim: "swir22"})
+    b02 = data.sel({band_dim: "blue"}).astype(int)*0.0001-0.1
+    b04 = data.sel({band_dim: "red"}).astype(int)*0.0001-0.1
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
+    b11 = data.sel({band_dim: "swir16"}).astype(int)*0.0001-0.1
+    b12 = data.sel({band_dim: "swir22"}).astype(int)*0.0001-0.1
 
     albedo = 0.356*b02 + 0.130*b04 + 0.373*b08 + 0.085*b11 + 0.072*b12 - 0.0018
 
@@ -75,9 +75,9 @@ def evi(item):
         bands=["blue", "red", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b02 = data.sel({band_dim: "blue"})
-    b04 = data.sel({band_dim: "red"})
-    b08 = data.sel({band_dim: "nir"})
+    b02 = data.sel({band_dim: "blue"}).astype(int)*0.0001-0.1
+    b04 = data.sel({band_dim: "red"}).astype(int)*0.0001-0.1
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
 
     evi = 2.5*(b08 - b04)/((b08 + 6*b04-7.5*b02) + 1)
 
@@ -96,9 +96,9 @@ def exg(item):
         bands=["blue", "green", "red"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b02 = data.sel({band_dim: "blue"})
-    b03 = data.sel({band_dim: "green"})
-    b04 = data.sel({band_dim: "red"})
+    b02 = data.sel({band_dim: "blue"}).astype(int)*0.0001-0.1
+    b03 = data.sel({band_dim: "green"}).astype(int)*0.0001-0.1
+    b04 = data.sel({band_dim: "red"}).astype(int)*0.0001-0.1
 
     ExG = (2 * b03) - (b04 + b02)
 

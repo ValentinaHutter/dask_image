@@ -79,32 +79,58 @@ def load_data(items, bands=bands, chunks={'time': -1, 'x': 1024, 'y': 1024}, res
 
     return cube
 
+def get_bands(items, data=None):
+    
+    band_dim = "bands"
+    if not data:
+        data = load_data(items).to_array(dim=band_dim)
 
-def get_viewing_angles(item):
+    b03 = data.sel({band_dim: band_names["B03"]})*0.0001-0.1
+    b04 = data.sel({band_dim: band_names["B04"]})*0.0001-0.1
+    b05 = data.sel({band_dim: band_names["B05"]})*0.0001-0.1
+    b06 = data.sel({band_dim: band_names["B06"]})*0.0001-0.1
+    b07 = data.sel({band_dim: band_names["B07"]})*0.0001-0.1
+    b8a = data.sel({band_dim: band_names["B8A"]})*0.0001-0.1
+    b11 = data.sel({band_dim: band_names["B11"]})*0.0001-0.1
+    b12 = data.sel({band_dim: band_names["B12"]})*0.0001-0.1
 
-    if "view:azimuth" in item.properties and "view:incidence_angle" in item.properties: 
-        saa = item.properties["view:sun_azimuth"]
-        sza = item.properties["view:sun_elevation"]
-        vaa = item.properties["view:azimuth"]
-        vza = item.properties["view:incidence_angle"]
-        return vza, vaa, sza, saa
+    viewZen, viewAzim, sunZen, sunAzim = get_viewing_angles(items)
 
-    metadata = requests.get(item.assets['granule_metadata'].href).text
+    return b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim
 
-    root = ET.fromstring(metadata)
-    child = root.find(root.tag.split('}')[0]+'}Geometric_Info')
-    in_root = child.find('Tile_Angles').find('Mean_Viewing_Incidence_Angle_List')
-    for angle in in_root.iter('Mean_Viewing_Incidence_Angle'):
-        if angle.attrib:
-            if angle.get('bandId') == '4':
-                zenith4 = angle.find('ZENITH_ANGLE')
-                azimuth4 = angle.find('AZIMUTH_ANGLE')
-                if not (zenith4.get('unit') == 'deg' and azimuth4.get('unit') == 'deg'):
-                    print('Warning: angle unit: ', zenith4.get('unit'), azimuth4.get('unit'))
-                saa = item.properties["view:sun_azimuth"]
-                sza = item.properties["view:sun_elevation"]
 
-                return float(zenith4.text), float(azimuth4.text), sza, saa
+def get_viewing_angles(items):
+    vza, vaa, sza, saa = [], [], [], []
+    for item in items:
+        if "view:azimuth" in item.properties and "view:incidence_angle" in item.properties: 
+            saa.append(item.properties["view:sun_azimuth"])
+            sza.append(item.properties["view:sun_elevation"])
+            vaa.append(item.properties["view:azimuth"])
+            vza.append(item.properties["view:incidence_angle"])
+        else: 
+            metadata = requests.get(item.assets['granule_metadata'].href).text
+
+            root = ET.fromstring(metadata)
+            child = root.find(root.tag.split('}')[0]+'}Geometric_Info')
+            in_root = child.find('Tile_Angles').find('Mean_Viewing_Incidence_Angle_List')
+            for angle in in_root.iter('Mean_Viewing_Incidence_Angle'):
+                if angle.attrib:
+                    if angle.get('bandId') == '4':
+                        zenith4 = angle.find('ZENITH_ANGLE')
+                        azimuth4 = angle.find('AZIMUTH_ANGLE')
+                        if not (zenith4.get('unit') == 'deg' and azimuth4.get('unit') == 'deg'):
+                            print('Warning: angle unit: ', zenith4.get('unit'), azimuth4.get('unit'))
+                        saa.append(item.properties["view:sun_azimuth"])
+                        sza.append(item.properties["view:sun_elevation"])
+                        vza.append(float(zenith4.text))
+                        vaa.append(float(azimuth4.text))
+
+    vza = np.array(vza)
+    vaa = np.array(vaa)
+    sza = np.array(sza)
+    saa = np.array(saa)
+    return vza, vaa, sza, saa
+
             
 
 def load_data_10(item):

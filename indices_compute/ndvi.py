@@ -31,8 +31,8 @@ def ndvi(item):
         bands=["red", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b04 = data.sel({band_dim: "red"})
-    b08 = data.sel({band_dim: "nir"})
+    b04 = data.sel({band_dim: "red"}).astype(int)*0.0001-0.1
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
 
     ndvi = (b08 - b04)/(b08 + b04)
 
@@ -52,8 +52,8 @@ def ndwi(item):
         bands=["green", "nir"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b03 = data.sel({band_dim: "green"})
-    b08 = data.sel({band_dim: "nir"})
+    b03 = data.sel({band_dim: "green"}).astype(int)*0.0001-0.1
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
 
     ndwi = (b03 - b08)/(b08 + b03)
 
@@ -73,8 +73,8 @@ def ndmi(item):
         bands=["nir", "swir16"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b08 = data.sel({band_dim: "nir"})
-    b11 = data.sel({band_dim: "swir16"})
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
+    b11 = data.sel({band_dim: "swir16"}).astype(int)*0.0001-0.1
    
     ndmi = (b08 - b11)/(b08 + b11)
 
@@ -94,8 +94,8 @@ def nbr(item):
         bands=["nir", "swir22"],
         chunks={'time': -1, 'x': 1024, 'y': 1024},
         resolution=(10)).to_array(dim=band_dim)
-    b08 = data.sel({band_dim: "nir"})
-    b12 = data.sel({band_dim: "swir22"})
+    b08 = data.sel({band_dim: "nir"}).astype(int)*0.0001-0.1
+    b12 = data.sel({band_dim: "swir22"}).astype(int)*0.0001-0.1
    
     nbr = (b08 - b12)/(b08 + b12)
 

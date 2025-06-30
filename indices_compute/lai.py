@@ -2,7 +2,7 @@ import numpy as np
 from .utils import *
 
 
-def lai(item):
+def lai(items):
 
     band_dim = "bands"
 
@@ -161,19 +161,8 @@ def lai(item):
             + 0.075107415847473 * neuron5
         )
         return s
-
-    data = load_data(item).to_array(dim=band_dim)
-
-    b03 = data.sel({band_dim: band_names["B03"]})
-    b04 = data.sel({band_dim: band_names["B04"]})
-    b05 = data.sel({band_dim: band_names["B05"]})
-    b06 = data.sel({band_dim: band_names["B06"]})
-    b07 = data.sel({band_dim: band_names["B07"]})
-    b8a = data.sel({band_dim: band_names["B8A"]})
-    b11 = data.sel({band_dim: band_names["B11"]})
-    b12 = data.sel({band_dim: band_names["B12"]})
-
-    viewZen, viewAzim, sunZen, sunAzim = get_viewing_angles(item)
+    
+    b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
 
     b03_norm = normalize(b03, 0, 0.253061520471542)
     b04_norm = normalize(b04, 0, 0.290393577911328)
@@ -261,8 +250,6 @@ def lai(item):
     l2 = layer2(n1, n2, n3, n4, n5)
 
     l = denormalize(l2, 0.000319182538301, 14.4675094548151) / 3
-
-    l.attrs = data.attrs
 
     l = l.assign_coords(**{"index": "lai"})
     l = l.expand_dims(dim="index")

@@ -2,7 +2,7 @@ import numpy as np
 from .utils import *
 
 
-def fcover(item):
+def fcover(items):
 
     def neuron1(
         b03_norm,
@@ -159,20 +159,8 @@ def fcover(item):
             - 0.0798516540739 * neuron5
         )
         return s
-
-    band_dim = "bands"
-    data = load_data(item).to_array(dim=band_dim)
-
-    b03 = data.sel({band_dim: band_names["B03"]})
-    b04 = data.sel({band_dim: band_names["B04"]})
-    b05 = data.sel({band_dim: band_names["B05"]})
-    b06 = data.sel({band_dim: band_names["B06"]})
-    b07 = data.sel({band_dim: band_names["B07"]})
-    b8a = data.sel({band_dim: band_names["B8A"]})
-    b11 = data.sel({band_dim: band_names["B11"]})
-    b12 = data.sel({band_dim: band_names["B12"]})
-
-    viewZen, viewAzim, sunZen, sunAzim = get_viewing_angles(item)
+    
+    b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
 
     b03_norm = normalize(b03, 0, 0.253061520472)
     b04_norm = normalize(b04, 0, 0.290393577911)
