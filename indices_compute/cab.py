@@ -244,9 +244,7 @@ def cab(items):
 
     l2 = layer2(n1, n2, n3, n4, n5)
 
-    c = denormalize(l2, 0.007426692959872, 873.908222110306)
-
-    c.attrs = data.attrs
+    c = denormalize(l2, 0.007426692959872, 873.908222110306) / 300
 
     c = c.assign_coords(**{"index": "cab"})
     c = c.expand_dims(dim="index")
