@@ -107,7 +107,7 @@ def get_viewing_angles(items):
             saa.append(item.properties["view:sun_azimuth"])
             sza.append(90-item.properties["view:sun_elevation"])
             vaa.append(item.properties["view:azimuth"])
-            vza.append(90-item.properties["view:incidence_angle"])
+            vza.append(item.properties["view:incidence_angle"])
         else: 
             metadata = requests.get(item.assets['granule_metadata'].href).text
 
