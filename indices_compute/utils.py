@@ -105,9 +105,9 @@ def get_viewing_angles(items):
     for item in items:
         if "view:azimuth" in item.properties and "view:incidence_angle" in item.properties: 
             saa.append(item.properties["view:sun_azimuth"])
-            sza.append(item.properties["view:sun_elevation"])
+            sza.append(90-item.properties["view:sun_elevation"])
             vaa.append(item.properties["view:azimuth"])
-            vza.append(item.properties["view:incidence_angle"])
+            vza.append(90-item.properties["view:incidence_angle"])
         else: 
             metadata = requests.get(item.assets['granule_metadata'].href).text
 
@@ -122,7 +122,7 @@ def get_viewing_angles(items):
                         if not (zenith4.get('unit') == 'deg' and azimuth4.get('unit') == 'deg'):
                             print('Warning: angle unit: ', zenith4.get('unit'), azimuth4.get('unit'))
                         saa.append(item.properties["view:sun_azimuth"])
-                        sza.append(item.properties["view:sun_elevation"])
+                        sza.append(90-item.properties["view:sun_elevation"])
                         vza.append(float(zenith4.text))
                         vaa.append(float(azimuth4.text))
 

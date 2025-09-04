@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dask_image"
-version = "2.0.3"
+version = "2.0.4"
 description = "Dask image with all requirements. Computed various indices. "
 authors = ["ValentinaHutter <valentina.hutter@eodc.eu>"]
 readme = "README.md"
@@ -32,6 +32,7 @@ dask-gateway = "<=2024.1.0"
 botocore = "1.35.88"
 aiobotocore = "*"
 numcodecs = "0.15.1"
+bokeh = ">=3,<3.3"
 
 
 [build-system]
