@@ -2,7 +2,7 @@ import numpy as np
 from .utils import *
 
 
-def cab(items):
+def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, b11=None, b12=None, viewZen=None, viewAzim=None, sunZen=None, sunAzim=None):
     
     def neuron1(
         b03_norm,
@@ -160,7 +160,8 @@ def cab(items):
         )
         return s
     
-    b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
+    if items:
+        b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
 
     b03_norm = normalize(b03, 0, 0.253061520471542)
     b04_norm = normalize(b04, 0, 0.290393577911328)
