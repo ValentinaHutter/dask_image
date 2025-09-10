@@ -1,6 +1,6 @@
 import numpy as np
 from .utils import *
-
+import dask.array as da
 
 def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, b11=None, b12=None, viewZen=None, viewAzim=None, sunZen=None, sunAzim=None):
     
@@ -162,6 +162,17 @@ def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
     
     if items:
         b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
+        viewZen_norm = normalize(np.cos(viewZen * degToRad), 0.918595400582046, 1)
+        sunZen_norm = normalize(
+            np.cos(sunZen * degToRad), 0.342022871159208, 0.936206429175402
+        )
+        relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
+    else:
+        viewZen_norm = normalize(da.cos(viewZen * degToRad), 0.918595400582046, 1)
+        sunZen_norm = normalize(
+            da.cos(sunZen * degToRad), 0.342022871159208, 0.936206429175402
+        )
+        relAzim_norm = da.cos((sunAzim - viewAzim) * degToRad)
 
     b03_norm = normalize(b03, 0, 0.253061520471542)
     b04_norm = normalize(b04, 0, 0.290393577911328)
@@ -171,11 +182,6 @@ def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
     b8a_norm = normalize(b8a, 0.026690138082061, 0.782011770669178)
     b11_norm = normalize(b11, 0.016388074192258, 0.493761397883092)
     b12_norm = normalize(b12, 0, 0.493025984460231)
-    viewZen_norm = normalize(np.cos(viewZen * degToRad), 0.918595400582046, 1)
-    sunZen_norm = normalize(
-        np.cos(sunZen * degToRad), 0.342022871159208, 0.936206429175402
-    )
-    relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
 
     n1 = neuron1(
         b03_norm,

@@ -1,4 +1,5 @@
 import numpy as np
+import dask.array as da
 from .utils import *
 
 
@@ -164,6 +165,16 @@ def lai(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
     
     if items:
         b03, b04, b05, b06, b07, b8a, b11, b12, viewZen, viewAzim, sunZen, sunAzim = get_bands(items)
+    
+        viewZen_cos = np.cos(viewZen * degToRad)
+        sunZen_cos = np.cos(sunZen * degToRad)
+        relAzim = (sunAzim - viewAzim) * degToRad
+        relAzim_norm = np.cos(relAzim)
+    else:
+        viewZen_cos = da.cos(viewZen * degToRad)
+        sunZen_cos = da.cos(sunZen * degToRad)
+        relAzim = (sunAzim - viewAzim) * degToRad
+        relAzim_norm = da.cos(relAzim)
 
     b03_norm = normalize(b03, 0, 0.253061520471542)
     b04_norm = normalize(b04, 0, 0.290393577911328)
@@ -174,13 +185,8 @@ def lai(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
     b11_norm = normalize(b11, 0.016388074192258, 0.493761397883092)
     b12_norm = normalize(b12, 0, 0.493025984460231)
 
-    viewZen_cos = np.cos(viewZen * degToRad)
-    sunZen_cos = np.cos(sunZen * degToRad)
-    relAzim = (sunAzim - viewAzim) * degToRad
-
     viewZen_norm = normalize(viewZen_cos, 0.918595400582046, 1)
     sunZen_norm = normalize(sunZen_cos, 0.342022871159208, 0.936206429175402)
-    relAzim_norm = np.cos(relAzim)
 
     n1 = neuron1(
         b03_norm,
