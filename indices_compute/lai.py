@@ -256,7 +256,7 @@ def lai(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
 
     l2 = layer2(n1, n2, n3, n4, n5)
 
-    l = denormalize(l2, 0.000319182538301, 14.4675094548151) / 3
+    l = denormalize(l2, 0.000319182538301, 14.4675094548151)
 
     l = l.assign_coords(**{"index": "lai"})
     l = l.expand_dims(dim="index")
