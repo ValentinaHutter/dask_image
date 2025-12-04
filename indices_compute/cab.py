@@ -251,7 +251,7 @@ def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
 
     l2 = layer2(n1, n2, n3, n4, n5)
 
-    c = denormalize(l2, 0.007426692959872, 873.908222110306) / 300
+    c = denormalize(l2, 0.007426692959872, 873.908222110306)
 
     c = c.assign_coords(**{"index": "cab"})
     c = c.expand_dims(dim="index")
