@@ -1,4 +1,5 @@
 import numpy as np
+import xarray as xr
 from .utils import *
 import dask.array as da
 
@@ -167,6 +168,12 @@ def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
             np.cos(sunZen * degToRad), 0.342022871159208, 0.936206429175402
         )
         relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
+    elif isinstance(viewZen, np.ndarray):
+        viewZen_norm = normalize(np.cos(viewZen * degToRad), 0.918595400582046, 1)
+        sunZen_norm = normalize(
+            np.cos(sunZen * degToRad), 0.342022871159208, 0.936206429175402
+        )
+        relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
     else:
         viewZen_norm = normalize(da.cos(viewZen * degToRad), 0.918595400582046, 1)
         sunZen_norm = normalize(
@@ -253,7 +260,8 @@ def cab(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
 
     c = denormalize(l2, 0.007426692959872, 873.908222110306)
 
-    c = c.assign_coords(**{"index": "cab"})
-    c = c.expand_dims(dim="index")
+    if isinstance(c, xr.DataArray):
+        c = c.assign_coords(**{"index": "cab"})
+        c = c.expand_dims(dim="index")
 
     return c

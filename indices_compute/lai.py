@@ -1,4 +1,5 @@
 import numpy as np
+import xarray as xr
 import dask.array as da
 from .utils import *
 
@@ -170,6 +171,11 @@ def lai(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
         sunZen_cos = np.cos(sunZen * degToRad)
         relAzim = (sunAzim - viewAzim) * degToRad
         relAzim_norm = np.cos(relAzim)
+    elif isinstance(viewAzim, np.ndarray):
+        viewZen_cos = np.cos(viewZen * degToRad)
+        sunZen_cos = np.cos(sunZen * degToRad)
+        relAzim = (sunAzim - viewAzim) * degToRad
+        relAzim_norm = np.cos(relAzim)
     else:
         viewZen_cos = da.cos(viewZen * degToRad)
         sunZen_cos = da.cos(sunZen * degToRad)
@@ -258,7 +264,8 @@ def lai(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=None, 
 
     l = denormalize(l2, 0.000319182538301, 14.4675094548151)
 
-    l = l.assign_coords(**{"index": "lai"})
-    l = l.expand_dims(dim="index")
+    if isinstance(l, xr.DataArray):
+        l = l.assign_coords(**{"index": "lai"})
+        l = l.expand_dims(dim="index")
 
     return l

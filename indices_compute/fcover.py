@@ -1,4 +1,5 @@
 import numpy as np
+import xarray as xr
 from .utils import *
 import dask.array as da
 
@@ -165,6 +166,10 @@ def fcover(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=Non
         viewZen_norm = normalize(np.cos(viewZen * degToRad), 0.918595400582, 0.999999999991)
         sunZen_norm = normalize(np.cos(sunZen * degToRad), 0.342022871159, 0.936206429175)
         relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
+    elif isinstance(viewZen, np.ndarray):
+        viewZen_norm = normalize(np.cos(viewZen * degToRad), 0.918595400582, 0.999999999991)
+        sunZen_norm = normalize(np.cos(sunZen * degToRad), 0.342022871159, 0.936206429175)
+        relAzim_norm = np.cos((sunAzim - viewAzim) * degToRad)
     else:
         viewZen_norm = normalize(da.cos(viewZen * degToRad), 0.918595400582, 0.999999999991)
         sunZen_norm = normalize(da.cos(sunZen * degToRad), 0.342022871159, 0.936206429175)
@@ -249,7 +254,8 @@ def fcover(items=None, b03=None, b04=None, b05=None, b06=None, b07=None, b8a=Non
 
     f = denormalize(l2, 0.000181230723879, 0.999638214715)
 
-    f = f.assign_coords(**{"index": "fcover"})
-    f = f.expand_dims(dim="index")
+    if isinstance(f, xr.DataArray):
+        f = f.assign_coords(**{"index": "fcover"})
+        f = f.expand_dims(dim="index")
 
     return f
