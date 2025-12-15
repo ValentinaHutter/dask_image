@@ -18,7 +18,7 @@ netcdf4 = "1.7.2"
 h5netcdf = "1.4.0"
 scipy = "<=1.15.1"
 shapely = "<=2.0.7"
-rasterio = {extras = ["core", "s3"], version = "<=1.4.3"}
+rasterio = {extras = ["core", "s3"], version = "^1.4.3"}
 odc-geo = "<=0.4.9.post0"
 odc-stac = "<=0.3.3"
 pandas = "<=2.2.3"
