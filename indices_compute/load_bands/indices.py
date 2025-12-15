@@ -8,7 +8,7 @@ def evi(cube_10, cube_20=None):
     b08 = cube_10.nir.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -21,7 +21,7 @@ def nbr(cube_10, cube_20):
     b12 = cube_20.swir22.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -34,7 +34,7 @@ def ndmi(cube_10, cube_20):
     b11 = cube_20.swir16.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -48,7 +48,7 @@ def nmdi(cube_10, cube_20):
     b12 = cube_20.swir22.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -61,7 +61,7 @@ def ndwi(cube_10, cube_20=None):
     b08 = cube_10.nir.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -74,7 +74,7 @@ def ndii(cube_10, cube_20):
     b11 = cube_20.swir16.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -88,7 +88,7 @@ def exg(cube_10, cube_20=None):
     b04 = cube_10.red.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -105,7 +105,7 @@ def tcari_osavi(cube_10, cube_20):
     b05 = cube_20.rededge1.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -118,7 +118,7 @@ def ndvi(cube_10, cube_20=None):
     b08 = cube_10.nir.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
@@ -138,7 +138,7 @@ def albedo(cube_10, cube_20):
     b12 = cube_20.swir22.astype(int)*0.0001-0.1
 
     if isinstance(cube_10.red, xr.DataArray):
-        NaN = np.where((cube_10.red == 0).values, False, True)
+        NaN = xr.where((cube_10.red == 0), False, True)
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
 
