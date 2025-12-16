@@ -76,7 +76,7 @@ def load_data(items, bands=bands, chunks={'time': -1, 'x': 1024, 'y': 1024}, res
         bands=bands,
         chunks=chunks,
         resolution=(resolution))
-    cube = cube.transpose(..., "time")
+    cube = cube.transpose("time", ...)
 
     return cube
 
