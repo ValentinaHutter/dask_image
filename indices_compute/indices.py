@@ -96,9 +96,8 @@ def exg(cube_10, cube_20=None):
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
         return np.where(NaN, ((2 * b03) - (b04 + b02)), np.nan).astype("float16")
-    
 
-    
+
 def tcari_osavi(cube_10, cube_20):
     # (3*((B05 – B04) – 0.2 * (B05 – B03) * (B05/4))/(1.16 * B08 – (B04/B08) + B04 + 0.16)
 
@@ -113,8 +112,8 @@ def tcari_osavi(cube_10, cube_20):
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
         return np.where(NaN, (3*((b05-b04) - 0.2*(b05-b03)*(b05/4))/(1.16*b08 - (b04/b08) + b04 + 0.16)), np.nan).astype("float16")
-    
-    
+
+
 def ndvi(cube_10, cube_20=None):
     # ((B08 - B04)/(B08 + B04))
     b04 = cube_10.red.astype(int)*0.0001-0.1
@@ -126,8 +125,8 @@ def ndvi(cube_10, cube_20=None):
     elif isinstance(cube_10.red, np.ndarray):
         NaN = np.where((cube_10.red == 0), False, True)
         return np.where(NaN, ((b08 - b04)/(b08 + b04)), np.nan).astype("float16")
-    
-    
+
+
 def albedo(cube_10, cube_20):
     # B02 * 0.1836 + B03 * 0.1759 + B04 * 0.1456 + B05 * 0.1347 + B06 * 0.1233 + B07 * 0.1134 + B08 * 0.1001 + B11 * 0.0231 + B12 * 0.0003
     b02 = cube_10.blue.astype(int)*0.0001-0.1
@@ -172,22 +171,22 @@ def check_input(b3, b4, b8, lai_thresholds):
 
 def normalize_data(b3, b4, b8, iza, sza, siaa, xmin, xmax):
     b3 = 2 * (b3 - xmin[0]) / (xmax[0] - xmin[0]) - 1
-    b4 = 2 * (b4 - xmin[0]) / (xmax[0] - xmin[0]) - 1
-    b8 = 2 * (b8 - xmin[0]) / (xmax[0] - xmin[0]) - 1
+    b4 = 2 * (b4 - xmin[1]) / (xmax[1] - xmin[1]) - 1
+    b8 = 2 * (b8 - xmin[2]) / (xmax[2] - xmin[2]) - 1
 
-    iza = 2 * (iza - xmin[0]) / (xmax[0] - xmin[0]) - 1
-    sza = 2 * (sza - xmin[0]) / (xmax[0] - xmin[0]) - 1
-    siaa = 2 * (siaa - xmin[0]) / (xmax[0] - xmin[0]) - 1
-    
+    iza = 2 * (iza - xmin[3]) / (xmax[3] - xmin[3]) - 1
+    sza = 2 * (sza - xmin[4]) / (xmax[4] - xmin[4]) - 1
+    siaa = 2 * (siaa - xmin[5]) / (xmax[5] - xmin[5]) - 1
+
     return b3, b4, b8, iza, sza, siaa
 
 
 def lai(cube_10, iza, sza, saa, iaa, sat):
     import math
 
-    b03 = cube_10.green.astype(int)*0.0001 - 0.1
-    b04 = cube_10.red.astype(int)*0.0001 - 0.1
-    b08 = cube_10.nir.astype(int)*0.0001 - 0.1
+    b03 = (cube_10.green.astype(int)-1000)/10000
+    b04 = (cube_10.red.astype(int)-1000)/10000
+    b08 = (cube_10.nir.astype(int)-1000)/10000
     iza = math.cos(math.radians(float(iza)))
     sza = math.cos(math.radians(float(sza)))
     siaa = math.cos(math.radians(float(saa)) - math.radians(float(iaa)))
@@ -240,7 +239,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
 
     ymin = 0.000233774
     ymax = 13.83459255
-    
+
     min_val = 0
     max_val = 8
     tolerance = -0.2
@@ -257,7 +256,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
         + sza * weights_first[0][4]
         + siaa * weights_first[0][5]
         + bias_first[0])
-    
+
     neuron1 = (
         b03 * weights_first[1][0] 
         + b04 * weights_first[1][1] 
@@ -266,7 +265,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
         + sza * weights_first[1][4]
         + siaa * weights_first[1][5]
         + bias_first[1])
-    
+
     neuron2 = (
         b03 * weights_first[2][0] 
         + b04 * weights_first[2][1] 
@@ -284,7 +283,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
         + sza * weights_first[3][4]
         + siaa * weights_first[3][5]
         + bias_first[3])
-    
+
     neuron4 = (
         b03 * weights_first[4][0] 
         + b04 * weights_first[4][1] 
@@ -293,7 +292,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
         + sza * weights_first[4][4]
         + siaa * weights_first[4][5]
         + bias_first[4])
-    
+
     n0_tan = da.tanh(neuron0.astype("float"))
     n1_tan = da.tanh(neuron1.astype("float"))
     n2_tan = da.tanh(neuron2.astype("float"))
@@ -307,7 +306,7 @@ def lai(cube_10, iza, sza, saa, iaa, sat):
         + n3_tan * weight_second[3]
         + n4_tan * weight_second[4]
         + bias_second)
-    
+
     denorm_val = (second_layer_output + 1) / 2 * (ymax - ymin) + ymin
 
     zeros = denorm_val.where(denorm_val > min_val, 0)
